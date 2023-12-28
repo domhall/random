@@ -5,6 +5,7 @@ import { ref } from 'vue'
 const count = ref(0)
 const currentNumber = ref(0)
 const numbers = ref([1])
+const previousNumbers = ref<number[]>([])
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max)
 }
@@ -23,6 +24,11 @@ function getNewNumber() {
     currentNumber.value = numbers.value[index]
     numbers.value.splice(index, 1)
     console.log(numbers.value.length)
+    previousNumbers.value.push(currentNumber.value)
+    console.log(currentNumber.value)
+    if (previousNumbers.value.length > 5) {
+      previousNumbers.value.splice(0, 1)
+    }
   }
 }
 </script>
@@ -35,6 +41,9 @@ function getNewNumber() {
     <br />
     <button v-on:click="getNewNumber">New number</button>
     <p>Current: {{ currentNumber }}</p>
+    <li v-for="number in previousNumbers.slice().reverse()" v-bind:key="number">
+      {{ number }}
+    </li>
   </div>
 </template>
 
